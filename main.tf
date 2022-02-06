@@ -16,7 +16,7 @@ resource "aws_vpc" "And_Digital_vpc" {
 resource "aws_internet_gateway" "internet_gateway" {
   vpc_id = aws_vpc.And_vpc.id
   tags = {
-    Name        = "${var.environment}-igw"
+    Name        = "${var.environment}-internet_gateway"
     Environment = var.environment
   }
 }
