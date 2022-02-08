@@ -17,5 +17,5 @@ module "EC2" {
 }
 output "elb_dns_name" {
   value       = module.EC2_elb_dns_name
-  description = "load balancer dns"
+  description = "load balanced web front end in AWS / dns"
 }
