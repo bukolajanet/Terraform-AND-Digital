@@ -112,22 +112,10 @@ resource "aws_route_table_association" "private" {
 #Elastic Load balancer
 resource "aws_security_group" "Elb_security_group" {
   name        = "Elb_security_group"
-  description = "Allow HTTP/HTTPS traffic to instances through Elastic Load Balancer"
+  description = "Allow HTTP traffic to instances through Elastic Load Balancer"
   vpc_id      = aws_vpc.And_vpc.id
 
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+ 
 
   ingress {
     from_port   = 80
@@ -158,44 +146,25 @@ resource "aws_load_balancer" "EC2_Elastic_load-balancer" {
 }
 
 
-resource "aws_lb_listener" "Listener_ELB" {
-  load_balancer_arn = aws_lb.EC2_ELB.arn
-  port              = 443
-  protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-2022-02"
-  certificate_arn   = aws_acm_certificate.janebuk.arn
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.target_groupELB.arn
-  }
-
-}
-
-resource "aws_lb_listener" "https_redirect" {
+resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.EC2_ELB.arn
   port              = 80
   protocol          = "HTTP"
 
   default_action {
-    type = "redirect"
-
-    redirect {
-      port        = "443"
-      protocol    = "HTTPS"
-      status_code = "HTTP_301"
-    }
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.target_groupELB.arn
   }
 }
 
 resource "aws_lb_target_group" "target_groupELB" {
-  port     = 443
-  protocol = "HTTPS"
+  port     = 80
+  protocol = "HTTP"
   vpc_id   = aws_vpc.And_vpc.id
 
   health_check {
     healthy_threshold   = 2
-    protocol            = "HTTPS"
+    protocol            = "HTTP"
     unhealthy_threshold = 2
   }
 
@@ -210,7 +179,7 @@ resource "aws_lb_target_group" "target_groupELB" {
 #Security Group
 resource "aws_security_group" "EC2_Security_group" {
   name        = "${var.environment}-default-sg"
-  description = "Allows SSH,HTTP, HTTPS "
+  description = "Allows SSH,HTTP,"
   vpc_id      = aws_vpc.And_vpc.id
   ingress {
     from_port   = "0"
