@@ -239,7 +239,7 @@ resource "aws_launch_configuration" "EC2_Launch_Configuration" {
   name_prefix = "test-"
   image_id      = var.EC2_ami
   instance_type = var.EC2_instance_type
-  key_name      = "Sysops"
+  key_name      = "janebuk"
   security_groups             = [aws_security_group.EC2.id]
   associate_public_ip_address = false
 
