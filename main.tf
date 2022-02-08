@@ -179,15 +179,15 @@ resource "aws_lb_target_group" "target_groupELB" {
 #Security Group
 resource "aws_security_group" "EC2_Security_group" {
   name        = "${var.environment}-default-sg"
-  description = "Allows SSH,HTTP,"
-  vpc_id      = aws_vpc.And_vpc.id
+  description = "Allows SSH,HTTP"
+  vpc_id      = aws_vpc.And_digital_vpc.id
   ingress {
     from_port   = "0"
     to_port     = "0"
     protocol    = "tcp"
     cidr_blocks = [aws_security_group.ElbSG.id]
   }
-
+}
   egress {
     from_port   = "0"
     to_port     = "0"
