@@ -24,7 +24,7 @@ resource "aws_internet_gateway" "internet_gateway" {
 #Elastic IP
 resource "aws_elastic_ip" "nat_elastic_ip" {
   vpc        = true
-  depends_on = [aws_internet_gateway.igw]
+  depends_on = [aws_internet_gateway.internet_gateway]
 }
 
 #NAT Gateway
